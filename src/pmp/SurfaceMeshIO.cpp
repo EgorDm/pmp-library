@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <limits>
+#include <set>
 
 #include <rply.h>
 
@@ -448,6 +449,7 @@ bool read_off_ascii(SurfaceMesh& mesh, FILE* in, const bool has_normals,
 
     // read faces: #N v[1] v[2] ... v[n-1]
     std::vector<Vertex> vertices;
+    std::set<unsigned int> ids;
     for (i = 0; i < nf; ++i)
     {
         // read line
@@ -458,6 +460,7 @@ bool read_off_ascii(SurfaceMesh& mesh, FILE* in, const bool has_normals,
         items = sscanf(lp, "%d%n", (int*)&nv, &nc);
         assert(items == 1);
         vertices.resize(nv);
+        ids.clear();
         lp += nc;
 
         // indices
@@ -466,9 +469,12 @@ bool read_off_ascii(SurfaceMesh& mesh, FILE* in, const bool has_normals,
             items = sscanf(lp, "%d%n", (int*)&idx, &nc);
             assert(items == 1);
             vertices[j] = Vertex(idx);
+            ids.insert(idx);
             lp += nc;
         }
-        if (vertices.size() == nv)
+
+        bool valid_face = vertices.size() == ids.size();
+        if (vertices.size() == nv && valid_face)
             mesh.add_face(vertices);
         else
             std::cerr << "OFF: fail to read face " << i << std::endl;
