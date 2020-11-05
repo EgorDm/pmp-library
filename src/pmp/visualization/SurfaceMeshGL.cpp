@@ -599,8 +599,8 @@ void SurfaceMeshGL::draw(const mat4& projection_matrix,
             }
             else
             {
-                phong_shader_.set_uniform("front_color", vec3(0.9, 0.9, 0.9));
-                phong_shader_.set_uniform("back_color", vec3(0.3, 0.3, 0.3));
+                phong_shader_.set_uniform("front_color", vec3(0.7, 0.7, 0.7));
+                phong_shader_.set_uniform("back_color", vec3(0.7, 0.7, 0.7));
                 phong_shader_.set_uniform("use_texture", true);
                 phong_shader_.set_uniform("use_srgb", srgb_);
                 glBindTexture(GL_TEXTURE_2D, texture_);
